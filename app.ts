@@ -16,7 +16,7 @@ app.use((req: Request, res: Response) => {
 });
 
 app.listen(3000, () => {
-  console.log("Runing.......")
+  console.log("Running.......")
 })
 
 export default app;

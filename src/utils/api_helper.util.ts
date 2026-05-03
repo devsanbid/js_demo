@@ -1,13 +1,13 @@
 // api response examples
 const res = {
-  "status": 200,
-  "success": true,
-  "message": "Products fetched successfully",
-  "data": [],
-  "meta": {
-    "page": 1,
-    "limit": 10,
-    "total": 100
+  status: 200,
+  success: true,
+  message: "Products fetched successfully",
+  data: [],
+  meta: {
+    page: 1,
+    limit: 10,
+    total: 100
   }
 }
 
@@ -47,14 +47,13 @@ export class ApiResponseHelper {
 
   static error(
     res: Response,
-    message: string = "Error",
-    status: number = 500
+    message: string = "success",
+    status: number = 200
   ): Response {
     const response: ApiResponse<null> = {
       status,
       success: true,
       message,
-      data: null,
     }
     return res.status(status).json(response)
   }
