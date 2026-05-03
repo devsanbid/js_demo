@@ -1,20 +1,12 @@
 import { Request, Response } from "express";
 import { ApiResponseHelper } from "../utils/api_helper.util"
 import { HttpException } from "../exceptions/http_exception";
+import {  Person } from "../types";
+import z from "zod";
+import { createPersonOTD } from "../dtos/person.dots";
 
-import { z } from "zod"
-export const personSchema = z.object({
-  id: z.number(),
-  name: z.string("Should be string").min(1, "Name is required"),
-  age: z.number().min(1, "Age can't be lower then 1").max(100, "Age can't be higher then 100")
-})
-
-
-// convert into type
-export type Person = z.infer<typeof personSchema>;
 
 // remove one properties
-export const createPerson = personSchema.omit({ id: true })
 
 let persons: Person[] = [
   { id: 1, name: "sandesh", age: 28 },
@@ -53,14 +45,15 @@ export class PersonController {
   };
 
   createPerson = (req: Request, res: Response) => {
-    const parsedData = createPerson.safeParse(req.body)
+    const parsedData = createPersonOTD.safeParse(req.body)
 
     if (!parsedData.success) {
       return ApiResponseHelper.error(res, z.prettifyError(parsedData.error), 400)
     }
 
 
-    const { name, age } = req.body;
+    const { name, age } = parsedData.data
+
     const newPerson: Person = {
       id: persons.length > 0 ? Math.max(...persons.map((p) => p.id)) + 1 : 1,
       name,
